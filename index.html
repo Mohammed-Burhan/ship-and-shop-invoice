@@ -13,11 +13,19 @@
             --light-gray: #f5f5f5;
         }
 
+        @page {
+            margin: 0;
+            size: auto;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #fff;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
         }
 
         .container {
@@ -29,7 +37,7 @@
 
         /* Header Section Styles */
         .header {
-            background-color: var(--primary-blue);
+            background-color: var(--primary-blue) !important;
             padding: 20px 40px;
             display: flex;
             align-items: center;
@@ -37,23 +45,6 @@
             color: white;
             position: relative;
             z-index: 1;
-        }
-
-        /* Print-only header */
-        .print-header {
-            display: none;
-            padding: 5px 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .print-header #print-date-time {
-            font-size: 12px;
-            float: left;
-        }
-
-        .print-header .print-title {
-            text-align: center;
-            font-weight: bold;
         }
 
         /* Logo Section Styles */
@@ -119,40 +110,6 @@
             padding: 20px 40px;
         }
 
-        .date-header {
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #333;
-            text-align: left;
-        }
-
-        /* Print logos section */
-        .print-logos {
-            display: none;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-
-        .print-krg-logo {
-            height: 50px;
-            margin-right: 15px;
-        }
-
-        .print-ep-logo {
-            height: 40px;
-            margin-right: 15px;
-        }
-
-        .print-receipt-title {
-            margin-left: auto;
-            text-align: right;
-        }
-
-        .print-receipt-title h2 {
-            margin: 0;
-            font-size: 16px;
-        }
-
         .info-boxes {
             display: flex;
             gap: 20px;
@@ -193,9 +150,10 @@
         .footer {
             margin-top: 50px;
             display: flex;
+            align-items: left;
             justify-content: space-between;
-            padding: 0 40px;
-            gap: 100px;
+            padding: 4px  0;
+            gap: 168px;
         }
 
         .footer-section {
@@ -233,7 +191,6 @@
 
         .right-footer .signature-line {
             margin-right: 0;
-
         }
 
         .signature-text {
@@ -241,6 +198,7 @@
             font-weight: normal;
         }
 
+        /* Hide browser URL, page numbers, etc. in print */
         @media print {
             body {
                 font-size: 12px;
@@ -250,6 +208,21 @@
                 background-color: white !important;
             }
 
+            /* Hide header and footer */
+            @page {
+                margin: 0;
+                size: auto;
+            }
+
+            /* Hide URL and page info */
+            html {
+                height: 100%;
+            }
+
+            .url-info {
+                display: none !important;
+            }
+
             .container {
                 box-shadow: none !important;
                 width: 100% !important;
@@ -257,7 +230,6 @@
                 margin: 0 !important;
                 padding: 0 !important;
             }
-
 
             .info-boxes {
                 gap: 40px !important;
@@ -271,6 +243,7 @@
             .footer {
                 padding: 0 20px !important;
                 margin-top: 30px !important;
+                padding-bottom: 20px !important;
             }
 
             /* Force table to show borders when printing */
@@ -322,27 +295,12 @@
                 </div>
             </div>
             <div class="invoice-title">
-                <h2>Receipt / بيصولة</h2>
+                <h2>Receipt / پسوولە</h2>
                 <div class="invoice-number" id="invoice-number">Invoice Number: INV-76543-2024</div>
             </div>
         </div>
 
-
-
         <div class="content">
-            <!-- Print version logos -->
-            <div class="print-logos">
-                <img class="print-krg-logo"
-                    src="https://api.eaglepost.com/storage/v1/object/public/shared/assets/KRD_logo.svg" alt="KRG Logo">
-                <img class="print-ep-logo"
-                    src="http://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/eagle-post-portal-eie3d8/assets/tbtldm63oylw/Logo_trans_yello.png"
-                    alt="EaglePost Logo">
-                <div class="print-receipt-title">
-                    <h2>Receipt / بيصولة</h2>
-                    <div>Invoice Number: INV-76543-2024</div>
-                </div>
-            </div>
-
             <div class="info-boxes">
                 <div class="info-box">
                     <p><strong>Eagle Post</strong></p>
@@ -354,10 +312,10 @@
                 </div>
                 <div class="info-box">
                     <p><strong>Customer Detail</strong></p>
-                    <p><strong>Name:</strong> <span id="customer-name"></span></p>
-                    <p><strong>Phone Number:</strong> <span id="customer-phone"></span></p>
-                    <p><strong>EP Number:</strong> <span id="ep-number"></span></p>
-                    <p><strong>Address:</strong> <span id="customer-address"></span></p>
+                    <p><strong>Name:</strong> <span id="customer-name">Hussen</span></p>
+                    <p><strong>Phone Number:</strong> <span id="customer-phone">9647510000000</span></p>
+                    <p><strong>EP Number:</strong> <span id="ep-number">EP-12434</span></p>
+                    <p><strong>Address:</strong> <span id="customer-address">Erbil , Je made</span></p>
                 </div>
             </div>
 
@@ -380,17 +338,17 @@
 
             <div class="footer">
                 <div class="footer-section left-footer">
-                    <p><strong>Payment Method:</strong> <span id="payment-method"></span></p>
-                    <p><strong>Date:</strong> <span id="invoice-date">3/10/2025</span></p>
-                    <p><strong>Received by:</strong> <span id="received-by"></span></p>
+                    <p><strong>Payment Method:</strong> <span id="payment-method">Cash</span></p>
+                    <p><strong>Date:</strong> <span id="invoice-date">10/3/2025</span></p>
+                    <p><strong>Received by:</strong> <span id="received-by">Hussen</span></p>
 
                     <div class="signature-area">
                         <div class="signature-line"></div>
-                        <div class="signature-text">Receiver Signature /</div>
+                        <div class="signature-text">Receiver Signature</div>
                     </div>
                 </div>
                 <div class="footer-section right-footer">
-                    <p><strong>Paid By:</strong></p>
+                    <p><strong>Paid By: <span>Hussen</span></strong></p>
 
                     <div class="signature-area">
                         <div class="signature-line"></div>
@@ -419,29 +377,9 @@
             ]
         };
 
-        // Function to get current date and time
-        function getCurrentDateTime() {
-            const now = new Date();
-            return now.toLocaleDateString() + ', ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
-
-        // Set current date and time in header if element exists
-        if (document.getElementById('current-datetime')) {
-            document.getElementById('current-datetime').textContent = getCurrentDateTime();
-        }
-
-        // Set the print-only header date
-        if (document.getElementById('print-date-time')) {
-            document.getElementById('print-date-time').textContent = getCurrentDateTime();
-        }
-
         // Function to populate invoice with data
         function populateInvoice(data) {
             document.getElementById('invoice-number').textContent = "Invoice Number: " + data.invoiceNumber;
-
-            if (document.querySelector('.print-receipt-title div')) {
-                document.querySelector('.print-receipt-title div').textContent = "Invoice Number: " + data.invoiceNumber;
-            }
 
             if (document.getElementById('customer-name')) document.getElementById('customer-name').textContent = data.customerName;
             if (document.getElementById('customer-phone')) document.getElementById('customer-phone').textContent = data.customerPhone;
@@ -496,6 +434,18 @@
             invoiceData.receivedBy = receivedBy;
             populateInvoice(invoiceData);
         }
+
+        // Add print listener to suppress headers/footers
+        window.addEventListener('beforeprint', function () {
+            // Add extra styling to hide browser headers/footers if needed
+            const style = document.createElement('style');
+            style.textContent = `
+                @page { margin: 0; }
+                html, body { height: 100%; margin: 0 !important; padding: 0 !important; }
+                .url-info, .page-info { display: none !important; visibility: hidden !important; }
+            `;
+            document.head.appendChild(style);
+        });
     </script>
 </body>
 
