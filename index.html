@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="print-purpose" content="invoice">
+    <title>EaglePost Invoice</title>
+    <style>
+        :root {
+            --primary-blue: #233a8e;
+            --primary-gold: #fecd05;
+            --light-gray: #f5f5f5;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header Section Styles */
+        .header {
+            background-color: var(--primary-blue);
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Print-only header */
+        .print-header {
+            display: none;
+            padding: 5px 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .print-header #print-date-time {
+            font-size: 12px;
+            float: left;
+        }
+
+        .print-header .print-title {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Logo Section Styles */
+        .logo-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-divider {
+            width: 2px;
+            height: 40px;
+            background-color: var(--primary-gold);
+            margin: 0 15px;
+        }
+
+        .krg-logo,
+        .epp-logo {
+            width: 70px;
+            height: 70px;
+        }
+
+        .krg-logo img,
+        .epp-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .eaglepost-title {
+            margin-left: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .eaglepost-title .ep-title {
+            font-size: 28px;
+            color: white;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .eaglepost-title .about {
+            color: var(--primary-gold);
+            font-size: 12px;
+        }
+
+        .invoice-title {
+            text-align: right;
+        }
+
+        .invoice-title h2 {
+            margin: 0;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .invoice-number {
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 20px 40px;
+        }
+
+        .date-header {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #333;
+            text-align: left;
+        }
+
+        /* Print logos section */
+        .print-logos {
+            display: none;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .print-krg-logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .print-ep-logo {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .print-receipt-title {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .print-receipt-title h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .info-boxes {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            flex: 1;
+            background-color: var(--light-gray);
+            padding: 15px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 40px;
+            gap: 100px;
+        }
+
+        .footer-section {
+            flex: 1;
+        }
+
+        .left-footer {
+            text-align: left;
+        }
+
+        .right-footer {
+            text-align: left;
+        }
+
+        .footer-info p {
+            margin: 2px 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .signature-area {
+            margin-top: 30px;
+        }
+
+        .signature-line {
+            border-top: 1px solid #333;
+            width: 200px;
+            margin-bottom: 4px;
+        }
+
+        .left-footer .signature-line {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        .right-footer .signature-line {
+            margin-right: 0;
+
+        }
+
+        .signature-text {
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        @media print {
+            body {
+                font-size: 12px;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                background-color: white !important;
+            }
+
+            .container {
+                box-shadow: none !important;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+
+            .info-boxes {
+                gap: 40px !important;
+            }
+
+            .info-box {
+                background-color: #f5f5f5 !important;
+                border: 1px solid #ddd !important;
+            }
+
+            .footer {
+                padding: 0 20px !important;
+                margin-top: 30px !important;
+            }
+
+            /* Force table to show borders when printing */
+            table,
+            th,
+            td {
+                border-color: #333 !important;
+                border-width: 1px !important;
+                border-style: solid !important;
+            }
+
+            /* Force table header bg to be lighter */
+            th {
+                background-color: #f5f5f5 !important;
+                color: black !important;
+            }
+
+            /* Make sure page breaks don't occur in the middle of a table */
+            table {
+                page-break-inside: avoid !important;
+            }
+
+            /* Make sure signatures appear properly */
+            .signature-line {
+                border-top: 1px solid black !important;
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="krg-logo">
+                    <img src="https://api.eaglepost.com/storage/v1/object/public/shared/assets/KRD_logo.svg"
+                        alt="KRG Logo">
+                </div>
+                <div class="logo-divider"></div>
+                <div class="epp-logo">
+                    <img src="http://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/eagle-post-portal-eie3d8/assets/tbtldm63oylw/Logo_trans_yello.png"
+                        alt="Eagle Post Logo">
+                </div>
+                <div class="eaglepost-title">
+                    <span class="ep-title">EaglePost</span>
+                    <span class="about">Express and Postal Services</span>
+                </div>
+            </div>
+            <div class="invoice-title">
+                <h2>Receipt / بيصولة</h2>
+                <div class="invoice-number" id="invoice-number">Invoice Number: INV-76543-2024</div>
+            </div>
+        </div>
+
+
+
+        <div class="content">
+            <!-- Print version logos -->
+            <div class="print-logos">
+                <img class="print-krg-logo"
+                    src="https://api.eaglepost.com/storage/v1/object/public/shared/assets/KRD_logo.svg" alt="KRG Logo">
+                <img class="print-ep-logo"
+                    src="http://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/eagle-post-portal-eie3d8/assets/tbtldm63oylw/Logo_trans_yello.png"
+                    alt="EaglePost Logo">
+                <div class="print-receipt-title">
+                    <h2>Receipt / بيصولة</h2>
+                    <div>Invoice Number: INV-76543-2024</div>
+                </div>
+            </div>
+
+            <div class="info-boxes">
+                <div class="info-box">
+                    <p><strong>Eagle Post</strong></p>
+                    <p><strong>Erbil / Iraq</strong></p>
+                    <p><strong>Address:</strong> 120 Meter, Airport Road Kirkuk, Direction, Opposite Cihan Towers.</p>
+                    <p><strong>Email:</strong> customerservice@eaglepost.com</p>
+                    <p><strong>Website:</strong> eaglepost.com</p>
+                    <p><strong>Phone Number:</strong> +964 750 596 6000 - +964 750 596 4000</p>
+                </div>
+                <div class="info-box">
+                    <p><strong>Customer Detail</strong></p>
+                    <p><strong>Name:</strong> <span id="customer-name"></span></p>
+                    <p><strong>Phone Number:</strong> <span id="customer-phone"></span></p>
+                    <p><strong>EP Number:</strong> <span id="ep-number"></span></p>
+                    <p><strong>Address:</strong> <span id="customer-address"></span></p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Description</th>
+                            <th>Website</th>
+                            <th>Weight in kg</th>
+                            <th>Price in USD</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-items">
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="footer">
+                <div class="footer-section left-footer">
+                    <p><strong>Payment Method:</strong> <span id="payment-method"></span></p>
+                    <p><strong>Date:</strong> <span id="invoice-date">3/10/2025</span></p>
+                    <p><strong>Received by:</strong> <span id="received-by"></span></p>
+
+                    <div class="signature-area">
+                        <div class="signature-line"></div>
+                        <div class="signature-text">Receiver Signature /</div>
+                    </div>
+                </div>
+                <div class="footer-section right-footer">
+                    <p><strong>Paid By:</strong></p>
+
+                    <div class="signature-area">
+                        <div class="signature-line"></div>
+                        <div class="signature-text">Signature</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - you can replace this with your actual data
+        const invoiceData = {
+            invoiceNumber: "INV-76543-2024",
+            customerName: "Muhammad Ali",
+            customerPhone: "+964 750 123 4567",
+            epNumber: "EP-9876",
+            customerAddress: "Erbil, Iraq",
+            paymentMethod: "Cash",
+            invoiceDate: "3/10/2025",
+            receivedBy: "John Smith",
+            items: [
+                { orderId: "ORD-001", description: "Clothing", website: "www.amazon.com", weight: 0.5, price: 5.2 },
+                { orderId: "ORD-002", description: "Cosmetic", website: "www.amazon.com", weight: 1, price: 3.8 },
+                { orderId: "ORD-003", description: "Electronics", website: "www.amazon.com", weight: 2, price: 7.5 }
+            ]
+        };
+
+        // Function to get current date and time
+        function getCurrentDateTime() {
+            const now = new Date();
+            return now.toLocaleDateString() + ', ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Set current date and time in header if element exists
+        if (document.getElementById('current-datetime')) {
+            document.getElementById('current-datetime').textContent = getCurrentDateTime();
+        }
+
+        // Set the print-only header date
+        if (document.getElementById('print-date-time')) {
+            document.getElementById('print-date-time').textContent = getCurrentDateTime();
+        }
+
+        // Function to populate invoice with data
+        function populateInvoice(data) {
+            document.getElementById('invoice-number').textContent = "Invoice Number: " + data.invoiceNumber;
+
+            if (document.querySelector('.print-receipt-title div')) {
+                document.querySelector('.print-receipt-title div').textContent = "Invoice Number: " + data.invoiceNumber;
+            }
+
+            if (document.getElementById('customer-name')) document.getElementById('customer-name').textContent = data.customerName;
+            if (document.getElementById('customer-phone')) document.getElementById('customer-phone').textContent = data.customerPhone;
+            if (document.getElementById('ep-number')) document.getElementById('ep-number').textContent = data.epNumber;
+            if (document.getElementById('customer-address')) document.getElementById('customer-address').textContent = data.customerAddress;
+            if (document.getElementById('payment-method')) document.getElementById('payment-method').textContent = data.paymentMethod;
+            if (document.getElementById('invoice-date')) document.getElementById('invoice-date').textContent = data.invoiceDate;
+            if (document.getElementById('received-by')) document.getElementById('received-by').textContent = data.receivedBy;
+
+            const tableBody = document.getElementById('invoice-items');
+            if (tableBody) {
+                tableBody.innerHTML = '';
+
+                // Add rows dynamically
+                data.items.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.orderId}</td>
+                        <td>${item.description}</td>
+                        <td>${item.website}</td>
+                        <td>${item.weight}</td>
+                        <td>${item.price}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+
+        // Call the function to populate the invoice
+        populateInvoice(invoiceData);
+
+        // Function to add new items to the invoice
+        function addInvoiceItem(orderId, description, website, weight, price) {
+            const item = { orderId, description, website, weight, price };
+            invoiceData.items.push(item);
+            populateInvoice(invoiceData);
+        }
+
+        // Function to update customer details
+        function updateCustomerDetails(name, phone, epNumber, address) {
+            invoiceData.customerName = name;
+            invoiceData.customerPhone = phone;
+            invoiceData.epNumber = epNumber;
+            invoiceData.customerAddress = address;
+            populateInvoice(invoiceData);
+        }
+
+        // Function to update payment details
+        function updatePaymentDetails(method, date, receivedBy) {
+            invoiceData.paymentMethod = method;
+            invoiceData.invoiceDate = date;
+            invoiceData.receivedBy = receivedBy;
+            populateInvoice(invoiceData);
+        }
+    </script>
+</body>
+
+</html>
